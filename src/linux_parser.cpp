@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-
+#include <iostream>
 #include "linux_parser.h"
 
 using std::stoi;
@@ -59,6 +59,7 @@ vector<int> LinuxParser::Pids() {
       // Is every character of the name a digit?
       string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
+        //std::cout << "!" << filename << "!\n";
         int pid = stoi(filename);
         pids.push_back(pid);
       }
@@ -83,8 +84,16 @@ float LinuxParser::MemoryUtilization() {
     {
       std::istringstream linestream(line);
       linestream >> key >> value;
-      if(key == "MemTotal:") {MemTotal = stof(value);}
-      if(key == "MemFree:") {MemFree = stof(value);}
+      if(key == "MemTotal:")
+      {
+        MemTotal = stof(value);
+        //std::cout << "!" << value << "!\t!" << MemTotal << "!\n";
+      }
+      if(key == "MemFree:")
+      {
+        MemFree = stof(value);
+        //std::cout << "!" << value << "!\t!" << MemFree << "!\n";
+      }
     }
   }
   return (MemTotal - MemFree)/MemTotal;
@@ -104,7 +113,15 @@ long LinuxParser::UpTime() {
     std::istringstream linestream(line);
     linestream >> systemUptime >> idleTime;
   }
-  return (static_cast<long>(stoi(systemUptime)));
+  //std::cout << "!" << systemUptime << "!\n";
+
+  float flSystemUptime = stof(systemUptime);
+  //std::cout << "!" << flSystemUptime << "!\n";
+
+  long lSystemUptime = static_cast<long>(flSystemUptime);
+  //std::cout << "!" << lSystemUptime << "!\n";
+
+  return lSystemUptime;
   }
 
 // TODO: Read and return the number of jiffies for the system
@@ -163,6 +180,7 @@ int LinuxParser::TotalProcesses() {
       {
         if(key == "processes")
         {
+          //std::cout << "!" << value << "!\n";
           return stoi(value);
         }
       }
@@ -187,6 +205,7 @@ int LinuxParser::RunningProcesses() {
       {
         if(key == "procs_running")
         {
+          //std::cout << "!" << value << "!\n";
           return std::stoi(value);
         }
       }
@@ -232,6 +251,7 @@ string LinuxParser::Ram(int pid)
         valueInt = stoi(valueKB);
         valueInt /= 1000;
         valueMB = to_string(valueInt);
+        //std::cout << "!" << valueKB << "!\t!" << valueMB << "!\n";
         return valueMB;
       }
     }
@@ -310,6 +330,7 @@ long LinuxParser::UpTime(int pid) {
     }
     processUptime = value;
   }
+  // std::cout << "!" << processUptime << "!\n";
   longProcessUpTime = static_cast<long>(stoi(processUptime));
   longProcessUpTime /= sysconf(_SC_CLK_TCK);
   return longProcessUpTime;

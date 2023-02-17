@@ -23,11 +23,11 @@ int Process::Pid() { return pid_; }
 // DONE
 float Process::CpuUtilization() {
     processCpuUtilization_ = LinuxParser::ProcessCpuUtilization(Pid());
-    utime_       = stoi(processCpuUtilization_[13]);
-    stime_       = stoi(processCpuUtilization_[14]);
-    cutime_      = stoi(processCpuUtilization_[15]);
-    cstime_     = stoi(processCpuUtilization_[16]);
-    starttime_   = stoi(processCpuUtilization_[21]);
+    utime_      = (processCpuUtilization_[13] != "" ? stoi(processCpuUtilization_[13]) : 0);
+    stime_      = (processCpuUtilization_[14] != "" ? stoi(processCpuUtilization_[14]) : 0);
+    cutime_     = (processCpuUtilization_[15] != "" ? stoi(processCpuUtilization_[15]) : 0);
+    cstime_     = (processCpuUtilization_[16] != "" ? stoi(processCpuUtilization_[16]) : 0);
+    starttime_  = (processCpuUtilization_[21] != "" ? stoi(processCpuUtilization_[21]) : 0);
 
     total_time_ = utime_ + stime_;
     total_time_ += cutime_ + cstime_;
@@ -46,7 +46,7 @@ string Process::Command() { return LinuxParser::Command(Pid()); }
 // TODO: Return this process's memory utilization
 // DONE
 string Process::Ram() {
-    ram_ = stoi(LinuxParser::Ram(Pid()));
+    ram_ = (LinuxParser::Ram(Pid()) != "" ? stoi(LinuxParser::Ram(Pid())) : 0);
     return LinuxParser::Ram(Pid()); }
 
 // TODO: Return the user (name) that generated this process
@@ -60,4 +60,4 @@ long int Process::UpTime() { return LinuxParser::UpTime(Pid()); }
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
 // DONE
-bool Process::operator<(Process const& a) const { return (a.ram_ < this->ram_  ? true : false); }
+bool Process::operator<(Process const& a) const { return (a.proCpuUsage_ < this->proCpuUsage_  ? true : false); }

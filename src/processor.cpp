@@ -9,14 +9,14 @@ float Processor::Utilization() {
     preIdle = Idle;
     preTotal = Total;
 
-    user        = stoi(strCpuUtilization_[0]);
-    nice        = stoi(strCpuUtilization_[1]);
-    system      = stoi(strCpuUtilization_[2]);
-    idle        = stoi(strCpuUtilization_[3]);
-    iowait      = stoi(strCpuUtilization_[4]);
-    irq         = stoi(strCpuUtilization_[5]);
-    softirq     = stoi(strCpuUtilization_[6]);
-    steal       = stoi(strCpuUtilization_[7]);
+    user        = (strCpuUtilization_[0] != "" ? stoi(strCpuUtilization_[0]) : 0);
+    nice        = (strCpuUtilization_[1] != "" ? stoi(strCpuUtilization_[1]) : 0);
+    system      = (strCpuUtilization_[2] != "" ? stoi(strCpuUtilization_[2]) : 0);
+    idle        = (strCpuUtilization_[3] != "" ? stoi(strCpuUtilization_[3]) : 0);
+    iowait      = (strCpuUtilization_[4] != "" ? stoi(strCpuUtilization_[4]) : 0);
+    irq         = (strCpuUtilization_[5] != "" ? stoi(strCpuUtilization_[5]) : 0);
+    softirq     = (strCpuUtilization_[6] != "" ? stoi(strCpuUtilization_[6]) : 0);
+    steal       = (strCpuUtilization_[7] != "" ? stoi(strCpuUtilization_[7]) : 0);
 //    guest       = stoi(strCpuUtilization_[8]);
 //    guest_nice = stoi(strCpuUtilization_[9]);
 

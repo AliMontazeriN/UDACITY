@@ -60,8 +60,11 @@ vector<int> LinuxParser::Pids() {
       string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         //std::cout << "!" << filename << "!\n";
-        int pid = stoi(filename);
-        pids.push_back(pid);
+        if(filename != "")
+        {
+          int pid = stoi(filename);
+          pids.push_back(pid);
+        }
       }
     }
   }
@@ -72,8 +75,8 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 // DONE
 float LinuxParser::MemoryUtilization() {
-  float MemTotal;
-  float MemFree;
+  float MemTotal = 1;
+  float MemFree = 0;
   string key;
   string value;
   string line;
@@ -86,12 +89,18 @@ float LinuxParser::MemoryUtilization() {
       linestream >> key >> value;
       if(key == "MemTotal:")
       {
-        MemTotal = stof(value);
+        if(value != "")
+        {
+          MemTotal = stof(value);
+        }
         //std::cout << "!" << value << "!\t!" << MemTotal << "!\n";
       }
       if(key == "MemFree:")
       {
-        MemFree = stof(value);
+        if(value != "")
+        {
+          MemFree = stof(value);
+        }
         //std::cout << "!" << value << "!\t!" << MemFree << "!\n";
       }
     }
@@ -105,6 +114,8 @@ long LinuxParser::UpTime() {
   string systemUptime {"0"};
   string idleTime {"0"};
   string line;
+  float flSystemUptime = 0;
+  long lSystemUptime = 0;
 
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if(stream.is_open())
@@ -115,10 +126,13 @@ long LinuxParser::UpTime() {
   }
   //std::cout << "!" << systemUptime << "!\n";
 
-  float flSystemUptime = stof(systemUptime);
+  if(systemUptime != "")
+  {
+    flSystemUptime = stof(systemUptime);
+  }
   //std::cout << "!" << flSystemUptime << "!\n";
 
-  long lSystemUptime = static_cast<long>(flSystemUptime);
+  lSystemUptime = static_cast<long>(flSystemUptime);
   //std::cout << "!" << lSystemUptime << "!\n";
 
   return lSystemUptime;
@@ -181,12 +195,15 @@ int LinuxParser::TotalProcesses() {
         if(key == "processes")
         {
           //std::cout << "!" << value << "!\n";
-          return stoi(value);
+          if(value != "")
+          {
+            return stoi(value);
+          }
         }
       }
     }
   }
-  return std::stoi(value);
+  return 0;
   }
 
 // TODO: Read and return the number of running processes
@@ -206,12 +223,15 @@ int LinuxParser::RunningProcesses() {
         if(key == "procs_running")
         {
           //std::cout << "!" << value << "!\n";
-          return std::stoi(value);
+          if(value != "")
+          {
+            return stoi(value);
+          }
         }
       }
     }
   }
-  return std::stoi(value);
+  return 0;
   }
 
 // TODO: Read and return the command associated with a process
@@ -248,7 +268,10 @@ string LinuxParser::Ram(int pid)
       linestream >> key >> valueKB;
       if(key == "VmSize:")
       {
-        valueInt = stoi(valueKB);
+        if(valueKB != "")
+        {
+          valueInt = stoi(valueKB);
+        }
         valueInt /= 1000;
         valueMB = to_string(valueInt);
         //std::cout << "!" << valueKB << "!\t!" << valueMB << "!\n";
@@ -331,8 +354,11 @@ long LinuxParser::UpTime(int pid) {
     processUptime = value;
   }
   // std::cout << "!" << processUptime << "!\n";
-  longProcessUpTime = static_cast<long>(stoi(processUptime));
-  longProcessUpTime /= sysconf(_SC_CLK_TCK);
+  if(processUptime != "")
+  {
+    longProcessUpTime = static_cast<long>(stoi(processUptime));
+    longProcessUpTime /= sysconf(_SC_CLK_TCK);
+  }
   return longProcessUpTime;
   }
 

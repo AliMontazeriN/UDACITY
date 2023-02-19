@@ -19,6 +19,16 @@ string Format::ElapsedTime(long seconds) {
 
     string elapsedTime{""};
     elapsedTime = "";
-    elapsedTime = to_string(HH) + ":" + to_string(MM) + ":" + to_string(SS);
+    
+    string sec = to_string(SS);
+    sec.insert(0, 2 - sec.length(), '0');
+
+    string min = to_string(MM);
+    min.insert(0, 2 - min.length(), '0');
+    
+    string hrs = to_string(HH);
+    hrs.insert(0, 2 - hrs.length(), '0');
+
+    elapsedTime = hrs + ":" + min + ":" + sec;
     return elapsedTime;
     }

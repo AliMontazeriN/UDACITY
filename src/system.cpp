@@ -25,6 +25,7 @@ Processor& System::Cpu() { return cpu_; }
 // DONE
 vector<Process>& System::Processes() {
     Process temp;
+    processes_ = {};
     for(uint i = 0; i < LinuxParser::Pids().size(); i++)
     {
         temp.Pid(LinuxParser::Pids()[i]);
